@@ -40,28 +40,36 @@ class DentalCare():
         global_doctors = []
         global_prices = []
         global_discounts = []
+        # open individual treatment
         elements = self.driver.find_elements_by_css_selector(
             'div.OfferItemBigstyle__ItemContent-sc-1t2pm83-11.geEdgE')
+
         for i, element in enumerate(elements):
             time.sleep(2)
             elements[i].click()
             time.sleep(2)
+
+            # get hospitals name
             hospital_names = self.driver.find_elements_by_css_selector(
                 'p.BundleProfileComstyle__EntityName-sc-6maffe-64.bypjky')
             hospital_names_ = [hospital_name.text for hospital_name in hospital_names]
 
+            # get treatment type
             treatment_types = self.driver.find_elements_by_css_selector(
                 'div.BundleProfileComstyle__BundleName-sc-6maffe-9.kGIugI')
             treatment_types_ = [hospital_type.text for hospital_type in hospital_types]
 
+            # get doctors name
             doctors = self.driver.find_elements_by_css_selector(
                 'p.DoctorsCarouselstyle__DrName-xq5jy1-5.eecTVM, p.DoctorsCarouselstyle__DrName-xq5jy1-5.eecTVM, p.DoctorsCarouselstyle__DrName-xq5jy1-5.eecTVM, p.DoctorsCarouselstyle__DrName-xq5jy1-5.eecTVM')
             doctors_ = [doctor.text for doctor in doctors]
 
+            # get prices after discount
             prices = self.driver.find_elements_by_css_selector(
-                '//*[@id="__next"]/div/div[2]/span/div/div[3]/div[2]/div[4]/div/div/span[1]/text()[1]')
+                'span.BundleProfileComstyle__PriceAfter-sc-6maffe-16.cNNDjW')
             prices_ = [price.text for price in prices]
 
+            #discount offered
             discounts = self.driver.find_elements_by_css_selector(
                 'span.BundleProfileComstyle__SpanSaved-sc-6maffe-62.bomHNs')
             discounts_ = [discount.text for discount in discounts]
@@ -97,6 +105,7 @@ class DentalCare():
 
             for hospital_name, treatment_type, doctor, price, discount in zip(hospital_names_, treatment_types_, doctors_, prices_, discounts_):
                 print(f"{hospital_name} >>>>>>>>> {treatment_type} >>>>>>>> {doctor} >>>>>>> {price} >>>>>>> {discount}")
+                
             elements = self.driver.find_elements_by_css_selector('div.OfferItemBigstyle__ItemContent-sc-1t2pm83-11.geEdgE')
         time.sleep(2)
 
