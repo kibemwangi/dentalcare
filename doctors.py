@@ -84,7 +84,7 @@ class DentalCare():
             locations_ = [location.text for location in locations]
 
             # Doctors Charges
-            charges = self.driver.find_element_by_xpath(
+            charges = self.driver.find_elements_by_xpath(
                 '//*/span/div/div[2]/span[2]/span[7]')
             charges_ = [charge.text for charge in charges]
 
@@ -102,7 +102,7 @@ class DentalCare():
             # Hospitals Name
             hospital_names = self.driver.find_elements_by_xpath(
                 '//*/span/a/span/span')
-            hospital_names_ = [hospital_names_.text for hospital_name in hospital_names]
+            hospital_names_ = [hospital_name.text for hospital_name in hospital_names]
 
             global_doctor_names.extend(doctor_names_)
             global_job_descriptions.extend(job_descriptions_)
@@ -115,19 +115,19 @@ class DentalCare():
 
             time.sleep(2)
             self.complete_global_doctor_names.extend(doctor_names_)
-            self.complete_job_descriptions.extend(job_descriptions_)
-            self.complete_specialisations.extend(specialisations_)
-            self.complete_locations.extend(locations_)
-            self.complete_charges.extend(charges_)
-            self.complete_waiting_times.extend(waiting_times_)
-            self.complete_contacts.extend(contacts_)
-            self.complete_hospital_names.extend(hospital_names_)
+            self.complete_global_job_descriptions.extend(job_descriptions_)
+            self.complete_global_specialisations.extend(specialisations_)
+            self.complete_global_locations.extend(locations_)
+            self.complete_global_charges.extend(charges_)
+            self.complete_global_waiting_times.extend(waiting_times_)
+            self.complete_global_contacts.extend(contacts_)
+            self.complete_global_hospital_names.extend(hospital_names_)
 
             time.sleep(2)
 
 
             if i > 1 and i % 5 == 0 :
-                self.df = pd.DataFrame(columns=["Doctor_name", "Job_description", "Specialisation",
+                self.df = pd.DataFrame(columns=["Doctor_name", "Specialisation",
                     "Location", "Charges", "Waiting_time", "Contact", "Hospital_name"])
 
                 self.df["Doctor_name"] = global_doctor_names
@@ -150,9 +150,9 @@ class DentalCare():
                 global_hospital_names = []
 
 
-            for doctor_names, job_descriptions, specialisations, location, charges, waiting_times, contacts, hospitals_names in zip(doctor_names_, 
-            job_descriptions_, specialisations_, locations_, charges_, waiting_times_, contacts_, hospital_names_):
-                print(f"{doctor_name} >>>>>>>>> {job_description} >>>>>>>> {specialisation} >>>>>>> {location} >>>>>>>>>>>>")
+            for doctor_names, job_descriptions, specialisations, location, charges, waiting_times, contacts, hospitals_names in zip(doctor_names_
+                , job_descriptions_, specialisations_, locations_, charges_, waiting_times_, contacts_, hospital_names_):
+                print(f"{doctor_names} >>>>>>>>> {job_descriptions} >>>>>>>> {specialisations} >>>>>>> {locations} >>>>>>>>>>>>")
                 
             
 
