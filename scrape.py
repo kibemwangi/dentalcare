@@ -8,16 +8,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import TimeoutException
 import requests
 
 
 class DentalCare():
 
     def __init__(self):
-        self.complete_df = pd.DataFrame(columns=["Hospital_name", "Treatment_type", "Doctors", "Price", "Discount"])
+        self.complete_df = pd.DataFrame(columns=["Hospital_name", "Treatment_type", "Price", "Discount"])
         self.complete_global_hospital_names = []
         self.complete_global_treatment_types = []
-        self.complete_global_doctors = []
+        #self.complete_global_doctors = []
         self.complete_global_prices = []
         self.complete_global_discounts = []
         self.driver = self.start_driver()
@@ -37,7 +39,7 @@ class DentalCare():
         time.sleep(2)
         global_hospital_names = []
         global_treatment_types = []
-        global_doctors = []
+        # global_doctors = []
         global_prices = []
         global_discounts = []
         # open individual treatment
@@ -57,12 +59,12 @@ class DentalCare():
             # get treatment type
             treatment_types = self.driver.find_elements_by_css_selector(
                 'div.BundleProfileComstyle__BundleName-sc-6maffe-9.kGIugI')
-            treatment_types_ = [hospital_type.text for hospital_type in hospital_types]
+            treatment_types_ = [treatment_type.text for treatment_type in treatment_types]
 
             # get doctors name
-            doctors = self.driver.find_elements_by_css_selector(
-                'p.DoctorsCarouselstyle__DrName-xq5jy1-5.eecTVM, p.DoctorsCarouselstyle__DrName-xq5jy1-5.eecTVM, p.DoctorsCarouselstyle__DrName-xq5jy1-5.eecTVM, p.DoctorsCarouselstyle__DrName-xq5jy1-5.eecTVM')
-            doctors_ = [doctor.text for doctor in doctors]
+            # doctors = self.driver.find_elements_by_css_selector(
+            #     'p.DoctorsCarouselstyle__DrName-xq5jy1-5.eecTVM, p.DoctorsCarouselstyle__DrName-xq5jy1-5.eecTVM, p.DoctorsCarouselstyle__DrName-xq5jy1-5.eecTVM, p.DoctorsCarouselstyle__DrName-xq5jy1-5.eecTVM')
+            # doctors_ = [doctor.text for doctor in doctors]
 
             # get prices after discount
             prices = self.driver.find_elements_by_css_selector(
@@ -76,43 +78,55 @@ class DentalCare():
 
             global_hospital_names.extend(hospital_names_)
             global_treatment_types.extend(treatment_types_)
-            global_doctors.extend(doctors_)
+            # global_doctors.extend(doctors_)
             global_prices.extend(prices_)
             global_discounts.extend(discounts_)
 
             self.complete_global_hospital_names.extend(hospital_names_)
             self.complete_global_treatment_types.extend(treatment_types_)
-            self.complete_global_doctors.extend(doctors_)
+            # self.complete_global_doctors.extend(doctors_)
             self.complete_global_prices.extend(prices_)
             self.complete_global_discounts.extend(discounts_)
             time.sleep(2)
             self.driver.execute_script("window.history.go(-1)")
 
-            if i > 1 and i % 5 == 0 :
-                self.df = pd.DataFrame(columns=["Hospital_name", "Treatment_type", "Doctors", "Price", "Discount"])
+            if i > 1 and i % 10 == 0 :
+                self.df = pd.DataFrame(columns=["Hospital_name", "Treatment_type", "Doctor", "Price", "Discount"])
                 self.df["Hospital_name"] = global_hospital_names
                 self.df["Treatment_type"] = global_treatment_types
-                self.df["Doctors"] = global_doctors
+                # self.df["Doctors"] = global_doctors
                 self.df["Price"] = global_prices
                 self.df["Discount"] = global_discounts
                 self.df.to_csv(f'output_{i}.csv', index=False)
                 global_hospital_names = []
                 global_treatment_types = []
-                global_doctors = []
+                # global_doctors = []
                 global_prices = []
                 global_discounts = []
 
 
-            for hospital_name, treatment_type, doctor, price, discount in zip(hospital_names_, treatment_types_, doctors_, prices_, discounts_):
-                print(f"{hospital_name} >>>>>>>>> {treatment_type} >>>>>>>> {doctor} >>>>>>> {price} >>>>>>> {discount}")
+            for hospital_name, treatment_type, price, discount in zip(hospital_names_, treatment_types_, prices_, discounts_):
+                print(f"{hospital_name} >>>>>>>>> {treatment_type} >>>>>>>> {price} >>>>>>> {discount}")
                 
             elements = self.driver.find_elements_by_css_selector('div.OfferItemBigstyle__ItemContent-sc-1t2pm83-11.geEdgE')
         time.sleep(2)
 
+        while True:
+            try:
+                WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable((By.XPATH, 
+                    '//*[@id="search-doctors-page__Pagination-page--next"]')))
+                self.driver.find_element_by_xpath('//*[@id="search-doctors-page__Pagination-page--next"]').click()
+                print('Navigating to Next Page..............')
+                
+            except (TimeoutException, WebDriverException) as e:
+                print('Last page reached.................')
+                break
+            self.driver.quit()
+
     def write_final_file(self):
         self.complete_df["Hospital_name"] = self.complete_global_hospital_names
         self.complete_df["Treatment_type"] = self.complete_global_treatment_types
-        self.complete_df["Doctors"] = self.complete_global_doctors
+        # self.complete_df["Doctor"] = self.complete_global_doctors
         self.complete_df["Price"] = self.complete_global_prices
         self.complete_df["Discount"] = self.complete_global_discounts
 
@@ -121,8 +135,8 @@ class DentalCare():
     def run(self):
         try:
             self.site()
-        except:
-            print('Scraper interupted')
+        except Exception as e:
+            print('Scraper interupted', e)
         finally:
             self.write_final_file()
 
