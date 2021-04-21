@@ -154,9 +154,11 @@ class DentalCare():
                 , job_descriptions_, specialisations_, locations_, charges_, waiting_times_, contacts_, hospital_names_):
                 print(f"{doctor_names} >>>>>>>>> {job_descriptions} >>>>>>>> {specialisations} >>>>>>> {locations} >>>>>>>>>>>>")
                 
-            
-
-        while True:
+            time.sleep(2)
+            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(2)
+        tries = 0   
+        while tries < 19:
             try:
                 self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);", WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable((By.XPATH, 
                     '//*[@id="search-doctors-page__Pagination-page--next"]'))))
@@ -165,10 +167,12 @@ class DentalCare():
                 
             except (TimeoutException, WebDriverException) as e:
                 print('Last page reached.................')
-                break
-            self.driver.quit()
+            #     break
+            # self.driver.close()
+        time.sleep(3)
+        
 
-            time.sleep(3)
+        
 
         # while True:
         #     try:
