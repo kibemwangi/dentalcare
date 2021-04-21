@@ -11,6 +11,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 from selenium.common.exceptions import TimeoutException
 import requests
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class DentalCare():
@@ -43,8 +44,6 @@ class DentalCare():
         global_prices = []
         global_discounts = []
         # open individual treatment
-
-       
 
         elements = self.driver.find_elements_by_css_selector(
             'div.OfferItemBigstyle__ItemContent-sc-1t2pm83-11.geEdgE')
@@ -113,21 +112,7 @@ class DentalCare():
                 print(f"{hospital_name} >>>>>>>>> {treatment_type} >>>>>>>> {price} >>>>>>> {discount}")
                 
             elements = self.driver.find_elements_by_css_selector('div.OfferItemBigstyle__ItemContent-sc-1t2pm83-11.geEdgE')
-        time.sleep(2)
-
-    def next_page(self):
-        tries = 0
-        while tries < 21:
-            try:
-                time.sleep(3)
-                self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                next_button = self.driver.find_element_by_xpath(
-                    '//*[@id="OffersGetChildKey__Pagination-page--next"]')
-                ActionChains(self.driver).move_to_element(
-                    next_button).click().perform()
-                tries += 1
-            except Exception as e:
-                logging.error(f'No Next button found due to error {e}...')
+            time.sleep(2)
 
     def write_final_file(self):
         self.complete_df["Hospital_name"] = self.complete_global_hospital_names

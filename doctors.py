@@ -1,6 +1,7 @@
 import logging
 import time
 import pandas as pd
+from pandas import DataFrame
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
@@ -11,7 +12,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 import requests
+from webdriver_manager.chrome import ChromeDriverManager
 
+# driver = webdriver.Chrome(ChromeDriverManager().install())
 
 class DentalCare():
 
@@ -126,7 +129,7 @@ class DentalCare():
             time.sleep(2)
 
 
-            if i > 1 and i % 5 == 0 :
+            if i > 1 and i % 20 == 0 :
                 self.df = pd.DataFrame(columns=["Doctor_name", "Specialisation",
                     "Location", "Charges", "Waiting_time", "Contact", "Hospital_name"])
 
@@ -167,11 +170,9 @@ class DentalCare():
                 
             except (TimeoutException, WebDriverException) as e:
                 print('Last page reached.................')
-            #     break
+                break
             # self.driver.close()
         time.sleep(3)
-        
-
         
 
         # while True:
