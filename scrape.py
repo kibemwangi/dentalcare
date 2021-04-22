@@ -102,7 +102,7 @@ class DentalCare():
                 # self.df["Doctors"] = global_doctors
                 self.df["Price"] = global_prices
                 self.df["Discount"] = global_discounts
-                self.df.to_csv(f'output_{i}.csv', index=False)
+                self.df.to_csv(f'_{i}.csv', index=False)
                 
                 global_hospital_names = []
                 global_treatment_types = []
