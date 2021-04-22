@@ -8,7 +8,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import TimeoutException
 import requests
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class DentalCare():
@@ -34,13 +37,16 @@ class DentalCare():
 
         self.driver.get(
             'https://saudi.vezeeta.com/en/offers/dental-care')
+
         time.sleep(2)
+        
         global_hospital_names = []
         global_treatment_types = []
         # global_doctors = []
         global_prices = []
         global_discounts = []
         # open individual treatment
+
         elements = self.driver.find_elements_by_css_selector(
             'div.OfferItemBigstyle__ItemContent-sc-1t2pm83-11.geEdgE')
 
@@ -87,6 +93,7 @@ class DentalCare():
             self.complete_global_discounts.extend(discounts_)
             time.sleep(2)
             self.driver.execute_script("window.history.go(-1)")
+                
 
             if i > 1 and i % 10 == 0 :
                 self.df = pd.DataFrame(columns=["Hospital_name", "Treatment_type", "Doctor", "Price", "Discount"])
@@ -95,7 +102,8 @@ class DentalCare():
                 # self.df["Doctors"] = global_doctors
                 self.df["Price"] = global_prices
                 self.df["Discount"] = global_discounts
-                self.df.to_csv(f'output_{i}.csv', index=False)
+                self.df.to_csv(f'_{i}.csv', index=False)
+                
                 global_hospital_names = []
                 global_treatment_types = []
                 # global_doctors = []
@@ -107,15 +115,7 @@ class DentalCare():
                 print(f"{hospital_name} >>>>>>>>> {treatment_type} >>>>>>>> {price} >>>>>>> {discount}")
                 
             elements = self.driver.find_elements_by_css_selector('div.OfferItemBigstyle__ItemContent-sc-1t2pm83-11.geEdgE')
-        time.sleep(2)
-
-        while True:
-            try:
-                element = self.driver.find_elements_by_css_selector('//*[@id="OffersGetChildKey__Pagination-page--next"]')
-                element.click()
-            except Exception as e:
-                break
-                # run code
+            time.sleep(2)
 
     def write_final_file(self):
         self.complete_df["Hospital_name"] = self.complete_global_hospital_names

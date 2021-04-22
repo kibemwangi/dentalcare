@@ -142,7 +142,7 @@ class DentalCare():
                 self.df["Contact"] = global_contacts
                 self.df["Hospital_name"] = global_hospital_names
 
-                self.df.to_csv(f'doctors_next_page_{i}.csv', index=False)
+                self.df.to_csv(f'doctors_data_{i}.csv', index=False)
                 global_doctor_names = []
                 global_job_descriptions = []
                 global_specialisations = []
@@ -158,35 +158,8 @@ class DentalCare():
                 print(f"{doctor_names} >>>>>>>>> {job_descriptions} >>>>>>>> {specialisations} >>>>>>> {locations} >>>>>>>>>>>>")
                 
             time.sleep(2)
-            # self.driver.execute_script("window.scrollTo(10, document.body.scrollHeight);")
-            time.sleep(2)
 
-    # def scroll_to_and_click(xpath):
-    #     tries = 0   
-    #     while tries < 19:
-    #         try:
-    #             element = TestUtil.driver.find_element_by_xpath('//*[@id="search-doctors-page__Pagination-page--next"]')
-    #             TestUtil.driver.execute_script('window.scrollTo(10, ' + str(element.location['y']) + ');')
-    #             element.click()
-    #             # self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);", WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable((By.XPATH, 
-    #             #     '//*[@id="search-doctors-page__Pagination-page--next"]'))))
-    #             # self.driver.find_element_by_xpath('//*[@id="search-doctors-page__Pagination-page--next"]').click()
-    #             print('Navigating to Next Page..............')
-                
-    #         except (TimeoutException, WebDriverException) as e:
-    #             print('Last page reached.................')
-    #             break
-            # self.driver.close()
         time.sleep(3)
-        
-
-        # while True:
-        #     try:
-        #         element = self.driver.find_elements_by_css_selector('//*[@id="OffersGetChildKey__Pagination-page--next"]')
-        #         element.click()
-        #     except Exception as e:
-        #         break
-        #         # run code
 
     def write_final_file(self):
 
@@ -201,7 +174,7 @@ class DentalCare():
         # self.complete_df["Doctor"] = self.complete_global_doctors
         
 
-        self.complete_df.to_csv('doctors_next_page_final.csv', index=False)
+        self.complete_df.to_csv('doctors_data_final.csv', index=False)
 
     def run(self):
         try:
