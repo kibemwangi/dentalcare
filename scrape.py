@@ -37,7 +37,9 @@ class DentalCare():
 
         self.driver.get(
             'https://saudi.vezeeta.com/en/offers/dental-care')
+
         time.sleep(2)
+        
         global_hospital_names = []
         global_treatment_types = []
         # global_doctors = []
@@ -101,6 +103,7 @@ class DentalCare():
                 self.df["Price"] = global_prices
                 self.df["Discount"] = global_discounts
                 self.df.to_csv(f'output_{i}.csv', index=False)
+                
                 global_hospital_names = []
                 global_treatment_types = []
                 # global_doctors = []
